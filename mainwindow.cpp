@@ -2,10 +2,10 @@
 #include "ui_mainwindow.h"
 
 //
-// JANELA
+// WINDOW
 //
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -23,8 +23,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::buyUpgrade(unsigned int upgradeNumber, unsigned int upgradeCost, unsigned int upgradeReward, QPushButton* button)
 {
-    if(score >= upgradeCost)
-    {
+    if (score >= upgradeCost) {
         upgrades[upgradeNumber] = true;
         score -= upgradeCost;
         scoreIncrement += upgradeReward;
@@ -36,32 +35,28 @@ void MainWindow::buyUpgrade(unsigned int upgradeNumber, unsigned int upgradeCost
 
 void MainWindow::on_firstUpgradeButton_clicked()
 {
-    if(!upgrades[0])
-    {
+    if (!upgrades[0]) {
         buyUpgrade(0, 10, 5, ui->firstUpgradeButton);
     }
 }
 
 void MainWindow::on_secondUpgradeButton_clicked()
 {
-    if(!upgrades[1])
-    {
+    if (!upgrades[1]) {
         buyUpgrade(1, 500, 10, ui->secondUpgradeButton);
     }
 }
 
 void MainWindow::on_thirdUpgradeButton_clicked()
 {
-    if(!upgrades[2])
-    {
+    if (!upgrades[2]) {
         buyUpgrade(1, 2500, 20, ui->thirdUpgradeButton);
     }
 }
 
 void MainWindow::on_finalUpgradeButton_clicked()
 {
-    if(!upgrades[3])
-    {
+    if (!upgrades[3]) {
         buyUpgrade(1, 25000, 50, ui->finalUpgradeButton);
     }
 }
@@ -69,7 +64,6 @@ void MainWindow::on_finalUpgradeButton_clicked()
 //
 // GAME LOOP
 //
-
 
 void MainWindow::on_gameLoopButton_clicked()
 {
@@ -80,4 +74,104 @@ void MainWindow::gameLoop()
 {
     score += scoreIncrement;
     ui->label->setText(QString::number(score));
+}
+
+//
+// SAVE GAME
+//
+
+void MainWindow::on_actionOpenGame_triggered()
+{
+    // Open file prompt
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open Game"), "",
+        tr("Doodles Clicker Save (*.doodlesclicker);;All Files (*)"));
+
+    if (fileName.isEmpty())
+        return;
+    else {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"),
+                file.errorString());
+            return;
+        }
+
+        // Create stream from file
+        QDataStream in(&file);
+        in.setVersion(QDataStream::Qt_4_5);
+
+        // Reset variables
+        score = NULL;
+        scoreIncrement = NULL;
+
+        // Stream variables from file
+        in >> score;
+        in >> scoreIncrement;
+        in >> upgrades[0];
+        ui->firstUpgradeButton->setEnabled(upgrades[0]);
+        in >> upgrades[1];
+        ui->firstUpgradeButton->setEnabled(upgrades[1]);
+        in >> upgrades[2];
+        ui->firstUpgradeButton->setEnabled(upgrades[2]);
+        in >> upgrades[3];
+        ui->firstUpgradeButton->setEnabled(upgrades[2]);
+
+        // Check if save game was corrupted
+        if (score == NULL || scoreIncrement == NULL) {
+            QMessageBox::information(this, tr("No data in file"),
+                tr("The save game you are attempting to open contains no score or score increment."));
+        }
+    }
+
+    // Update game state
+    ui->label->setText(QString::number(score));
+    ui->incrementLabel->setText(" + " + QString::number(scoreIncrement));
+}
+
+void MainWindow::on_actionSaveGame_triggered()
+{
+    // Open file prompt
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save Game"), "",
+        tr("Doodles Clicker Save (*.doodlesclicker);;All Files (*)"));
+
+    if (fileName.isEmpty())
+        return;
+    else {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"),
+                file.errorString());
+            return;
+        }
+
+        // Create stream for file
+        QDataStream out(&file);
+        out.setVersion(QDataStream::Qt_4_5);
+
+        // Stream variables from file
+        out << score;
+        out << scoreIncrement;
+        out << upgrades[0];
+        out << upgrades[1];
+        out << upgrades[2];
+        out << upgrades[3];
+    }
+}
+
+void MainWindow::on_actionNewGame_triggered()
+{
+    score = 0;
+    scoreIncrement = 1;
+    upgrades[0] = false;
+    upgrades[1] = false;
+    upgrades[2] = false;
+    upgrades[3] = false;
+    ui->firstUpgradeButton->setEnabled(true);
+    ui->secondUpgradeButton->setEnabled(true);
+    ui->thirdUpgradeButton->setEnabled(true);
+    ui->finalUpgradeButton->setEnabled(true);
+    ui->label->setText(QString::number(score));
+    ui->incrementLabel->setText(" + " + QString::number(scoreIncrement));
 }

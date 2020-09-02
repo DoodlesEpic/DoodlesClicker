@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,6 +25,10 @@ private slots:
     void on_secondUpgradeButton_clicked();
     void on_thirdUpgradeButton_clicked();
     void on_finalUpgradeButton_clicked();
+
+    void on_actionNewGame_triggered();
+    void on_actionSaveGame_triggered();
+    void on_actionOpenGame_triggered();
 
 private:
     Ui::MainWindow *ui;
