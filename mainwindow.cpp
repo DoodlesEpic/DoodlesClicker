@@ -23,7 +23,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::buyUpgrade(unsigned int upgradeNumber, unsigned int upgradeCost, unsigned int upgradeReward, QPushButton* button)
 {
-    if (score >= upgradeCost) {
+    if (!upgrades[upgradeNumber] && score >= upgradeCost) {
         upgrades[upgradeNumber] = true;
         score -= upgradeCost;
         scoreIncrement += upgradeReward;
@@ -35,30 +35,22 @@ void MainWindow::buyUpgrade(unsigned int upgradeNumber, unsigned int upgradeCost
 
 void MainWindow::on_firstUpgradeButton_clicked()
 {
-    if (!upgrades[0]) {
-        buyUpgrade(0, 10, 5, ui->firstUpgradeButton);
-    }
+    buyUpgrade(0, 10, 5, ui->firstUpgradeButton);
 }
 
 void MainWindow::on_secondUpgradeButton_clicked()
 {
-    if (!upgrades[1]) {
-        buyUpgrade(1, 500, 10, ui->secondUpgradeButton);
-    }
+    buyUpgrade(1, 500, 10, ui->secondUpgradeButton);
 }
 
 void MainWindow::on_thirdUpgradeButton_clicked()
 {
-    if (!upgrades[2]) {
-        buyUpgrade(1, 2500, 20, ui->thirdUpgradeButton);
-    }
+    buyUpgrade(2, 2500, 20, ui->thirdUpgradeButton);
 }
 
 void MainWindow::on_finalUpgradeButton_clicked()
 {
-    if (!upgrades[3]) {
-        buyUpgrade(1, 25000, 50, ui->finalUpgradeButton);
-    }
+    buyUpgrade(3, 25000, 50, ui->finalUpgradeButton);
 }
 
 //
