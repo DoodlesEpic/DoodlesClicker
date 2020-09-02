@@ -101,13 +101,13 @@ void MainWindow::on_actionOpenGame_triggered()
         in >> score;
         in >> scoreIncrement;
         in >> upgrades[0];
-        ui->firstUpgradeButton->setEnabled(upgrades[0]);
         in >> upgrades[1];
-        ui->firstUpgradeButton->setEnabled(upgrades[1]);
         in >> upgrades[2];
-        ui->firstUpgradeButton->setEnabled(upgrades[2]);
         in >> upgrades[3];
-        ui->firstUpgradeButton->setEnabled(upgrades[2]);
+        ui->firstUpgradeButton->setEnabled(!upgrades[0]);
+        ui->secondUpgradeButton->setEnabled(!upgrades[1]);
+        ui->thirdUpgradeButton->setEnabled(!upgrades[2]);
+        ui->finalUpgradeButton->setEnabled(!upgrades[3]);
 
         // Check if save game was corrupted
         if (score == NULL || scoreIncrement == NULL) {
