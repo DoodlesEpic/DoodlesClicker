@@ -142,7 +142,7 @@ void MainWindow::on_actionSaveGame_triggered()
         QDataStream out(&file);
         out.setVersion(QDataStream::Qt_4_5);
 
-        // Stream variables from file
+        // Stream variables to file
         out << score;
         out << scoreIncrement;
         out << upgrades[0];
