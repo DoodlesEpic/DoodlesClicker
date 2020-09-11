@@ -18,6 +18,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void resizeEvent(QResizeEvent* event);
+
 private slots:
     void on_gameLoopButton_clicked();
 

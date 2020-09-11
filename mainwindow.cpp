@@ -18,6 +18,26 @@ MainWindow::~MainWindow()
 }
 
 //
+// TEXT RESIZING
+//
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    // Reference window height
+    unsigned int height = this->size().height();
+
+    // Resize the score label
+    QFont font = ui->label->font();
+    font.setPointSizeF(height / 5.0f);
+    ui->label->setFont(font);
+
+    // Resize the increment score label
+    QFont incrementFont = ui->incrementLabel->font();
+    font.setPointSizeF(height / 5.0f);
+    ui->incrementLabel->setFont(incrementFont);
+}
+
+//
 // UPGRADES
 //
 
